@@ -4,7 +4,9 @@
   "description": "Projet de 3e Architecture des Logiciels dans la matière Tests Unitaires",
   "main": "./src/index.js",
   "scripts": {
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "unit-test": "mocha --exit \"./test/unit/*.js\"",
+    "integration-test": "mocha --exit \"./test/integration/*.js\""
   },
   "keywords": [],
   "author": "POTHIER Lucas & LAMARQUE Loïc",
