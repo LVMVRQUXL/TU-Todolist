@@ -1,0 +1,34 @@
+name: CD Frontend - Tag Release
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'frontend/**'
+
+env:
+  FRONTEND_MODULE_PATH: ./frontend
+
+jobs:
+  # TAG THE RELEASE ON GITHUB
+  tag-release:
+    runs-on: ubuntu-latest
+    env:
+      GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+      GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set identity
+        run: |
+          git config user.email "$GIT_USER_EMAIL"
+          git config user.name "$GIT_USER_NAME"
+      - name: Create tag
+        run: |
+          version=`sed -nE 's/^\s*"version": "(.*?)",$/\1/p' $FRONTEND_MODULE_PATH/package.json`
+
+          echo "Creating tag for Frontend version $version..."
+          git tag -a "frontend-$version" -m "Release Frontend version $version"
+          echo "SUCCESS\n"
+      - name: Push tag to Github
+        run: git push --tags origin
