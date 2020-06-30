@@ -1,0 +1,33 @@
+name: CD API - Deploy
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'api/**'
+
+env:
+  API_MODULE_PATH: ./api
+
+jobs:
+  tag-release:
+    runs-on: ubuntu-latest
+    env:
+      GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+      GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set identity
+        run: |
+          git config user.email "$GIT_USER_EMAIL"
+          git config user.name "$GIT_USER_NAME"
+      - name: Create tag
+        run: |
+          version=`sed -nE 's/^\s*"version": "(.*?)",$/\1/p' $API_MODULE_PATH/package.json`
+
+          echo "Creating tag for API version $version..."
+          git tag -a "api-$version" -m "Release API version $version"
+          echo "SUCCESS\n"
+      - name: Push tag to Github
+        run: git push --tags origin
