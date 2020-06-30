@@ -1,15 +1,16 @@
-name: CD API - Tag Release
+name: CD Frontend - Tag Release
 on:
   push:
     branches:
       - 'master'
     paths:
-      - 'api/**'
+      - 'frontend/**'
 
 env:
-  API_MODULE_PATH: ./api
+  FRONTEND_MODULE_PATH: ./frontend
 
 jobs:
+  # TAG THE RELEASE ON GITHUB
   tag-release:
     runs-on: ubuntu-latest
     env:
@@ -24,10 +25,10 @@ jobs:
           git config user.name "$GIT_USER_NAME"
       - name: Create tag
         run: |
-          version=`sed -nE 's/^\s*"version": "(.*?)",$/\1/p' $API_MODULE_PATH/package.json`
+          version=`sed -nE 's/^\s*"version": "(.*?)",$/\1/p' $FRONTEND_MODULE_PATH/package.json`
 
-          echo "Creating tag for API version $version..."
-          git tag -a "api-$version" -m "Release API version $version"
+          echo "Creating tag for Frontend version $version..."
+          git tag -a "frontend-$version" -m "Release Frontend version $version"
           echo "SUCCESS\n"
       - name: Push tag to Github
         run: git push --tags origin
