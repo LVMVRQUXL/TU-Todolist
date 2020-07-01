@@ -5,7 +5,7 @@ const SwaggerSpec = require('../utils').SwaggerSpec;
 module.exports = (app) => {
     app.use(cors());
 
-    // TODO
+    require('./task.route')(app);
 
     app.use('/swagger', swaggerUi.serve, swaggerUi.setup(SwaggerSpec));
 };
