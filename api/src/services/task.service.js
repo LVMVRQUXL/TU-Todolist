@@ -2,14 +2,14 @@ const {Task} = require('../models');
 
 class TaskService {
     /**
-     * Create a task with given values
-     *
      * @param values {object}
      *
-     * @returns {Promise<Task>}
+     * @returns {Promise<TaskDTO|undefined>}
      */
     async create(values) {
-        return Task.create(values);
+        const createdTask = await Task.create(values);
+
+        return createdTask ? this.mapToDTO(createdTask) : undefined;
     }
 
     /**
@@ -24,12 +24,12 @@ class TaskService {
     }
 
     /**
-     * Find all tasks
-     *
-     * @returns {Promise<Task[]>}
+     * @returns {Promise<TaskDTO[]>}
      */
     async findAll() {
-        return Task.findAll();
+        const tasks = Task.findAll();
+
+        return tasks.map(task => this.mapToDTO(task));
     }
 
     /**

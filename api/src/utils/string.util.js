@@ -1,8 +1,6 @@
 class StringUtil {
     /**
-     * Check if given string is empty or not
-     *
-     * @param string {string}
+     * @param string
      *
      * @returns {boolean}
      */

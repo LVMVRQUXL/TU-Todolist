@@ -8,7 +8,7 @@ const definition = {
 
 const options = {
     definition: definition,
-    apis: ['./src/routes/*.route.js']
+    apis: ['./src/routers/*.js']
 };
 
 module.exports = swaggerJSDoc(options);
