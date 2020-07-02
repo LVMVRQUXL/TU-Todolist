@@ -13,8 +13,6 @@ class TaskService {
     }
 
     /**
-     * Remove one task corresponding to given where clause
-     *
      * @param where {object}
      *
      * @returns {Promise<void>}
@@ -27,20 +25,20 @@ class TaskService {
      * @returns {Promise<TaskDTO[]>}
      */
     async findAll() {
-        const tasks = Task.findAll();
+        const tasks = await Task.findAll();
 
         return tasks.map(task => this.mapToDTO(task));
     }
 
     /**
-     * Find one task corresponding to given where clause
-     *
      * @param where {object}
      *
-     * @returns {Promise<Task|null>}
+     * @returns {Promise<TaskDTO|undefined>}
      */
     async findOne(where) {
-        return Task.findOne({where: where});
+        const task = await Task.findOne({where: where});
+
+        return task ? this.mapToDTO(task) : undefined;
     }
 
     /**
@@ -55,8 +53,6 @@ class TaskService {
     }
 
     /**
-     * Update one task corresponding to where clause
-     *
      * @param values {object}
      * @param where {object}
      *

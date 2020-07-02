@@ -1,19 +1,19 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
 
-const HttpCodeUtil = require('../utils').HttpCodeUtil;
 const TaskController = require('../controllers').TaskController;
 
-const notImplementedMiddleware = (req, res) => res.status(HttpCodeUtil.NOT_IMPLEMENTED).end();
+// PUT '/tasks/{id}' => Update one task from id
+// TODO: Swagger documentation
+router.put('/:id', bodyParser.json(), TaskController.updateOneTaskFromId);
 
-// TODO: PUT '/tasks/{id}' => Update one task from id
-router.put('/:id', notImplementedMiddleware);
+// DELETE '/tasks/{id}' => Remove one task from id
+// TODO: Swagger documentation
+router.delete('/:id', TaskController.removeOneTaskFromId);
 
-// TODO: DELETE '/tasks/{id}' => Remove one task from id
-router.delete('/:id', notImplementedMiddleware);
-
-// TODO: GET '/tasks/{id}' => Get one task from id
-router.get('/:id', notImplementedMiddleware);
+// GET '/tasks/{id}' => Get one task from id
+// TODO: Swagger documentation
+router.get('/:id', TaskController.findOneTaskFromId);
 
 // GET '/tasks' => Get all tasks
 // TODO: Swagger documentation
