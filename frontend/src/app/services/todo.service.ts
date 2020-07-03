@@ -21,6 +21,7 @@ export class TodoService {
 
   // Get Todos
   getTodos():Observable<Todo[]> {
+    console.log(this.http.get<Todo[]>(`${this.todosUrl}${this.todosLimit}`))
     return this.http.get<Todo[]>(`${this.todosUrl}${this.todosLimit}`);
   }
 
