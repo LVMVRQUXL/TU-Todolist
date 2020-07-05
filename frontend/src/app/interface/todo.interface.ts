@@ -1,11 +1,10 @@
 export interface TodoApiReponse {
-    todos: Todo[];
-    totalTodos: number;   
+    todos: Todo[]  
 }
 
 export interface Todo {
-    "userId": number,
-    "id": number,
-    "title":string,
-    "completed":boolean
+    userId: number,
+    id: number,
+    title:string,
+    completed:boolean
 }

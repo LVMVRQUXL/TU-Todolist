@@ -1,6 +1,4 @@
-import { TodoApiReponse } from 'src/app/interface/todo.interface'
-export const MockTodoApiResponse: TodoApiReponse = {
-    "todos":[
+export let MockTodosArrayApiResponse = [
         {
           "userId": 1,
           "id": 1,
@@ -31,5 +29,4 @@ export const MockTodoApiResponse: TodoApiReponse = {
           "title": "laboriosam mollitia et enim quasi adipisci quia provident illum",
           "completed": false
         }
-      ],
-}
+      ]

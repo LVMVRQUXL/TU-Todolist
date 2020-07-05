@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { MockTodoApiResponse } from 'src/assets/mock-data/mock-todo-response.json';
 
-fdescribe('AddTodoComponent', () => {
+describe('AddTodoComponent', () => {
   let component: AddTodoComponent;
   let fixture: ComponentFixture<AddTodoComponent>;
   
