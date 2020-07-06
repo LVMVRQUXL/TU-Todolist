@@ -37,11 +37,11 @@ describe('TodoDirective', () => {
     expect(nativeEl.querySelector('div').style.background).toBe('');
   })
 
-  it('should initialize with background', fakeAsync(() => {
+  /*it('should initialize with background', fakeAsync(() => {
     //spyOn(component, 'addTodo');
     let button = fixture.debugElement.nativeElement.querySelector('button');
     button.click();
     tick();
     //expect(component.addTodo).toHaveBeenCalled()
-  }))
+  }))*/
 });

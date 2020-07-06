@@ -5,6 +5,7 @@ import { TodoService } from 'src/app/services/todo.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { MockTodoApiResponse } from 'src/assets/mock-data/mock-todo-response.json';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('AddTodoComponent', () => {
   let component: AddTodoComponent;
@@ -16,7 +17,7 @@ describe('AddTodoComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ AddTodoComponent ],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, ReactiveFormsModule],
       providers: [
         {provide: TodoService, useValue: todoService}
       ]
@@ -30,7 +31,17 @@ describe('AddTodoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  /*it('should create', () => {
     expect(component).toBeTruthy();
-  });
+  });*/
+
+  /*it('should emit on click', ()=>{
+    console.log(fixture)
+    const nativeElement = fixture.nativeElement;
+    const button = nativeElement.querySelector('.btn');
+    button.dispatchEvent(new Event('click'));
+    console.log(button)
+    fixture.detectChanges();
+    expect(component.onSubmit).toHaveBeenCalled();
+  });*/
 });

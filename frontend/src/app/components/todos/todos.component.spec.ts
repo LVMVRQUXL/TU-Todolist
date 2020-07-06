@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TodoService } from 'src/app/services/todo.service';
 import { MockTodosArrayApiResponse } from 'src/assets/mock-data/mock-todosArray-response.json';
 
-fdescribe('TodosComponent', () => {
+describe('TodosComponent', () => {
   let component: TodosComponent;
   let fixture: ComponentFixture<TodosComponent>;
 
