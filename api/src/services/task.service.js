@@ -23,11 +23,11 @@ class TaskService {
 
     /**
      * @returns {Promise<TaskDTO[]>}
-     * TODO: unit tests
      */
     async findAll() {
         const tasks = await Task.findAll();
 
+        // noinspection JSCheckFunctionSignatures
         return tasks.map(task => this.mapToDTO(task));
     }
 

@@ -10,6 +10,8 @@ module.exports = () => describe('TaskService', () => {
             create: () => {
             },
             destroy: () => {
+            },
+            findAll: () => {
             }
         }
     };
@@ -20,6 +22,15 @@ module.exports = () => describe('TaskService', () => {
     const fakeTask = {
         id: 1,
         content: 'test'
+    };
+
+    const _assert_calledOnceWithExactly = (spy, args) => {
+        sandbox.assert.calledOnce(spy);
+        if (!args) {
+            sandbox.assert.calledWithExactly(spy);
+        } else {
+            sandbox.assert.calledWithExactly(spy, args);
+        }
     };
 
     afterEach(() => sandbox.restore());
@@ -33,6 +44,9 @@ module.exports = () => describe('TaskService', () => {
             spyMapToDTO = sandbox.spy(TaskService, 'mapToDTO');
         });
 
+        // noinspection JSUnresolvedFunction
+        const _call = async (values) => await TaskService.create(values);
+
         it('should return the created task', async () => {
             // SETUP
             const values = {content: fakeTask.content};
@@ -43,17 +57,14 @@ module.exports = () => describe('TaskService', () => {
             stubCreate.resolves(fakeTask);
 
             // CALL
-            // noinspection JSUnresolvedFunction
-            const taskDTO = await TaskService.create(values);
+            const taskDTO = await _call(values);
 
             // VERIFY
             assert.notStrictEqual(taskDTO, undefined);
             assert.strictEqual(taskDTO.id, expectedTaskDTO.id);
             assert.strictEqual(taskDTO.content, expectedTaskDTO.content);
-            sandbox.assert.calledOnce(stubCreate);
-            sandbox.assert.calledWithExactly(stubCreate, values);
-            sandbox.assert.calledOnce(spyMapToDTO);
-            sandbox.assert.calledWithExactly(spyMapToDTO, fakeTask);
+            _assert_calledOnceWithExactly(stubCreate, values);
+            _assert_calledOnceWithExactly(spyMapToDTO, fakeTask);
         });
 
         it('should return undefined if a conflict has occurred', async () => {
@@ -63,13 +74,11 @@ module.exports = () => describe('TaskService', () => {
             stubCreate.resolves(undefined);
 
             // CALL
-            // noinspection JSUnresolvedFunction
-            const taskDTO = await TaskService.create(values);
+            const taskDTO = await _call(values);
 
             // VERIFY
             assert.strictEqual(taskDTO, expectedTaskDTO);
-            sandbox.assert.calledOnce(stubCreate);
-            sandbox.assert.calledWithExactly(stubCreate, values);
+            _assert_calledOnceWithExactly(stubCreate, values);
             sandbox.assert.notCalled(spyMapToDTO);
         });
     });
@@ -88,8 +97,51 @@ module.exports = () => describe('TaskService', () => {
 
             // VERIFY
             assert.strictEqual(result, expectedResult);
-            sandbox.assert.calledOnce(stubDestroy);
-            sandbox.assert.calledWithExactly(stubDestroy, {where: where});
+            _assert_calledOnceWithExactly(stubDestroy, {where: where});
+        });
+    });
+
+    describe('#findAll', () => {
+        // noinspection JSUnresolvedFunction
+        const _call = async () => await TaskService.findAll();
+
+        it('should return a singleton list of tasks', async () => {
+            // SETUP
+            const expectedTaskDTO = {
+                id: fakeTask.id,
+                content: fakeTask.content
+            };
+            const stubFindAll = sandbox.stub(MockedModels.Task, 'findAll');
+            const spyMapToDTO = sandbox.spy(TaskService, 'mapToDTO');
+            stubFindAll.resolves([fakeTask]);
+
+            // CALL
+            const taskDTOs = await _call();
+
+            // VERIFY
+            assert.notStrictEqual(taskDTOs, undefined);
+            assert.strictEqual(taskDTOs.length, 1);
+            const taskDTO = taskDTOs[0];
+            assert.strictEqual(taskDTO.id, expectedTaskDTO.id);
+            assert.strictEqual(taskDTO.content, expectedTaskDTO.content);
+            _assert_calledOnceWithExactly(stubFindAll);
+            _assert_calledOnceWithExactly(spyMapToDTO, fakeTask);
+        });
+
+        it('should return an empty list of tasks', async () => {
+            // SETUP
+            const stubFindAll = sandbox.stub(MockedModels.Task, 'findAll');
+            const spyMapToDTO = sandbox.spy(TaskService, 'mapToDTO');
+            stubFindAll.resolves([]);
+
+            // CALL
+            const taskDTOs = await _call();
+
+            // VERIFY
+            assert.notStrictEqual(taskDTOs, undefined);
+            assert.strictEqual(taskDTOs.length, 0);
+            _assert_calledOnceWithExactly(stubFindAll);
+            sandbox.assert.notCalled(spyMapToDTO);
         });
     });
 
@@ -102,6 +154,7 @@ module.exports = () => describe('TaskService', () => {
             };
 
             // CALL
+            // noinspection JSUnresolvedFunction
             const taskDTO = TaskService.mapToDTO(fakeTask);
 
             // VERIFY
