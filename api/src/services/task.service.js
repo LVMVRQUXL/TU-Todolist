@@ -44,12 +44,9 @@ class TaskService {
     }
 
     /**
-     * Map given task to DTO
-     *
      * @param task {Task}
      *
      * @returns {TaskDTO}
-     * TODO: unit tests
      */
     mapToDTO(task) {
         return new TaskDTO(task);

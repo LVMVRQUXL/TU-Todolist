@@ -92,4 +92,22 @@ module.exports = () => describe('TaskService', () => {
             sandbox.assert.calledWithExactly(stubDestroy, {where: where});
         });
     });
+
+    describe('#mapToDTO', () => {
+        it('should return a task DTO with given values', () => {
+            // SETUP
+            const expectedTaskDTO = {
+                id: fakeTask.id,
+                content: fakeTask.content
+            };
+
+            // CALL
+            const taskDTO = TaskService.mapToDTO(fakeTask);
+
+            // VERIFY
+            assert.notStrictEqual(taskDTO, undefined);
+            assert.strictEqual(taskDTO.id, expectedTaskDTO.id);
+            assert.strictEqual(taskDTO.content, expectedTaskDTO.content);
+        });
+    });
 });
