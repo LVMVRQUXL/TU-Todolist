@@ -1,8 +1,9 @@
-<div [ngClass]="setClasses()">
+<div [ngClass]="setClasses()" id="{{ todo.title }}">
   <p>
     <input
       (change)="onToggle(todo)"
       type="checkbox"
+      class="lineThrough"
       id="{{ todo.id }}"
       [checked]="todo.completed"
     />
