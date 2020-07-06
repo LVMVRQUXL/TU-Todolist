@@ -16,6 +16,7 @@ class TaskService {
      * @param where {object}
      *
      * @returns {Promise<void>}
+     * TODO: unit tests
      */
     async destroy(where) {
         await Task.destroy({where: where});
@@ -23,6 +24,7 @@ class TaskService {
 
     /**
      * @returns {Promise<TaskDTO[]>}
+     * TODO: unit tests
      */
     async findAll() {
         const tasks = await Task.findAll();
@@ -34,6 +36,7 @@ class TaskService {
      * @param where {object}
      *
      * @returns {Promise<TaskDTO|undefined>}
+     * TODO: unit tests
      */
     async findOne(where) {
         const task = await Task.findOne({where: where});
@@ -47,6 +50,7 @@ class TaskService {
      * @param task {Task}
      *
      * @returns {TaskDTO}
+     * TODO: unit tests
      */
     mapToDTO(task) {
         return new TaskDTO(task);
@@ -57,6 +61,7 @@ class TaskService {
      * @param where {object}
      *
      * @returns {Promise<void>}
+     * TODO: unit tests
      */
     async update(values, where) {
         await Task.update(values, {where: where});
