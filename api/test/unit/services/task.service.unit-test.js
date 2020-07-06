@@ -8,6 +8,8 @@ module.exports = () => describe('TaskService', () => {
     const MockedModels = {
         Task: {
             create: () => {
+            },
+            destroy: () => {
             }
         }
     };
@@ -20,6 +22,8 @@ module.exports = () => describe('TaskService', () => {
         content: 'test'
     };
 
+    afterEach(() => sandbox.restore());
+
     describe('#create', () => {
         let stubCreate = undefined;
         let spyMapToDTO = undefined;
@@ -28,7 +32,6 @@ module.exports = () => describe('TaskService', () => {
             stubCreate = sandbox.stub(MockedModels.Task, 'create');
             spyMapToDTO = sandbox.spy(TaskService, 'mapToDTO');
         });
-        afterEach(() => sandbox.restore());
 
         it('should return the created task', async () => {
             // SETUP
@@ -68,6 +71,25 @@ module.exports = () => describe('TaskService', () => {
             sandbox.assert.calledOnce(stubCreate);
             sandbox.assert.calledWithExactly(stubCreate, values);
             sandbox.assert.notCalled(spyMapToDTO);
+        });
+    });
+
+    describe('#destroy', () => {
+        it('should return nothing', async () => {
+            // SETUP
+            const where = {id: fakeTask.id};
+            const expectedResult = undefined;
+            const stubDestroy = sandbox.stub(MockedModels.Task, 'destroy');
+            stubDestroy.resolves();
+
+            // CALL
+            // noinspection JSUnresolvedFunction
+            const result = await TaskService.destroy(where);
+
+            // VERIFY
+            assert.strictEqual(result, expectedResult);
+            sandbox.assert.calledOnce(stubDestroy);
+            sandbox.assert.calledWithExactly(stubDestroy, {where: where});
         });
     });
 });

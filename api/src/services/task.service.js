@@ -16,7 +16,6 @@ class TaskService {
      * @param where {object}
      *
      * @returns {Promise<void>}
-     * TODO: unit tests
      */
     async destroy(where) {
         await Task.destroy({where: where});
