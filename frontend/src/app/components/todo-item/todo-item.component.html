@@ -1,13 +1,13 @@
-<div [ngClass]="setClasses()" id="{{ todo.title }}">
+<div [ngClass]="setClasses()" id="{{ formatStringId(todo.title) }}">
   <p>
     <input
       (change)="onToggle(todo)"
       type="checkbox"
       class="lineThrough"
-      id="{{ todo.id }}"
+      id="item-{{ todo.id }}"
       [checked]="todo.completed"
     />
-    <label for="{{ todo.id }}">
+    <label for="item-{{ todo.id }}">
       {{ todo.title }}
     </label>
     <button (click)="onDelete(todo)" class="del">X</button>

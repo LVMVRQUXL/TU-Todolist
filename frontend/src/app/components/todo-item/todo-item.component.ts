@@ -38,4 +38,13 @@ export class TodoItemComponent implements OnInit {
     this.deleteTodo.emit(todo);
   }
 
+  formatStringId(string): string {
+    const specialChars = [' ', ',', ';', '.', '!', '?', ':', '(', ')', '{', '}', '[', ']', '#'];
+    specialChars.forEach((char) => {
+      string = string.replace(char, '-');
+    });
+
+    return string;
+  }
+
 }
