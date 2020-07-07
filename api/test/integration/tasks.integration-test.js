@@ -5,7 +5,7 @@ const request = require('supertest');
 const assert = require('assert');
 
 const tasksRouter = require('../../src/routers/tasks.router');
-const {HttpCodeUtil, ResponseUtil, StringUtil} = require('../../src/utils');
+const {HttpCodeUtil, NumberUtil, ResponseUtil, StringUtil} = require('../../src/utils');
 const TaskService = require('../../src/services').TaskService;
 
 const BASE_URI = '/tasks';
@@ -14,13 +14,17 @@ const FAKE_TASK = {
     content: 'test'
 };
 
+let spyNumberUtilIsZero = undefined;
 let spyResponseUtilBadRequest = undefined;
 let spyResponseUtilConflict = undefined;
 let spyResponseUtilCreated = undefined;
 let spyResponseUtilInternalServerError = undefined;
+let spyResponseUtilNoContent = undefined;
+let spyResponseUtilOk = undefined;
 let spyStringUtilIsEmpty = undefined;
 
 let stubTaskServiceCreate = undefined;
+let stubTaskServiceFindAll = undefined;
 
 /**
  * @param app {*}
@@ -33,8 +37,96 @@ const tests = (app) => void describe('Tasks integration tests', () => {
     });
     afterEach(() => sandbox.restore());
 
+    testGetTasks_(app);
     testPostTasks_(app);
 });
+
+/**
+ * @param app {*}
+ *
+ * @private
+ */
+const testGetTasks_ = (app) => void describe(`GET ${BASE_URI}`, () => {
+    beforeEach(() => {
+        stubTaskServiceFindAll = sandbox.stub(TaskService, 'findAll');
+        spyNumberUtilIsZero = sandbox.spy(NumberUtil, 'isZero');
+        spyResponseUtilNoContent = sandbox.spy(ResponseUtil, 'noContent');
+        spyResponseUtilOk = sandbox.spy(ResponseUtil, 'ok');
+    });
+
+    // noinspection JSUnresolvedFunction
+    /**
+     * @return {Promise<Object>}
+     */
+    const call = async () => await request(app).get(BASE_URI);
+
+    /**
+     * @param serviceResponse {Array<{id: number, content: string}>}
+     */
+    const checkServiceCallAndNoContent = (serviceResponse) => {
+        sandbox.assert.calledOnce(stubTaskServiceFindAll);
+        sandbox.assert.calledWithExactly(stubTaskServiceFindAll);
+        sandbox.assert.calledOnce(spyNumberUtilIsZero);
+        sandbox.assert.calledWithExactly(spyNumberUtilIsZero, serviceResponse.length);
+    };
+
+    const USEFUL_METHODS = {call, checkServiceCallAndNoContent};
+
+    testGetTasks_returnsOkStatusCode_(USEFUL_METHODS);
+    testGetTasks_returnsNoContentStatusCode_(USEFUL_METHODS);
+});
+
+/**
+ * @param methods {Object}
+ *
+ * @private
+ */
+const testGetTasks_returnsOkStatusCode_ = (methods) =>
+    void it(`should return ${HttpCodeUtil.OK} and a singleton array of tasks`, async () => {
+        // SETUP
+        const tasks = [FAKE_TASK];
+        const expectedResponse = {
+            statusCode: HttpCodeUtil.OK,
+            body: tasks
+        };
+        stubTaskServiceFindAll.resolves(tasks);
+
+        // CALL
+        const response = await methods.call();
+
+        // VERIFY
+        checkResponse_(response, expectedResponse);
+        methods.checkServiceCallAndNoContent(tasks);
+        sandbox.assert.notCalled(spyResponseUtilNoContent);
+        sandbox.assert.calledOnce(spyResponseUtilOk);
+        checkNoInternalSeverError_();
+    });
+
+/**
+ * @param methods {Object}
+ *
+ * @private
+ */
+const testGetTasks_returnsNoContentStatusCode_ = (methods) =>
+    void it(`should return ${HttpCodeUtil.NO_CONTENT}`, async () => {
+        // SETUP
+        const tasks = [];
+        const expectedResponse = {
+            statusCode: HttpCodeUtil.NO_CONTENT,
+            body: {}
+        };
+        stubTaskServiceFindAll.resolves(tasks);
+
+        // CALL
+        const response = await methods.call();
+
+        // VERIFY
+        checkResponse_(response, expectedResponse);
+        methods.checkServiceCallAndNoContent(tasks);
+        sandbox.assert.calledOnce(spyResponseUtilNoContent);
+        sandbox.assert.notCalled(spyResponseUtilOk);
+        checkNoInternalSeverError_();
+    });
 
 /**
  * @param app {*}
@@ -58,7 +150,7 @@ const testPostTasks_ = (app) => void describe(`POST ${BASE_URI}`, () => {
      *
      * @private
      */
-    const _call = async (data) => await request(app).post(BASE_URI).send(data);
+    const call = async (data) => await request(app).post(BASE_URI).send(data);
 
     /**
      * @param dataContent {string}
@@ -66,7 +158,7 @@ const testPostTasks_ = (app) => void describe(`POST ${BASE_URI}`, () => {
      *
      * @private
      */
-    const _checkBadRequest = (dataContent, pass) => {
+    const checkBadRequest = (dataContent, pass) => {
         sandbox.assert.calledOnce(spyStringUtilIsEmpty);
         sandbox.assert.calledWithExactly(spyStringUtilIsEmpty, dataContent);
         if (pass) {
@@ -76,14 +168,11 @@ const testPostTasks_ = (app) => void describe(`POST ${BASE_URI}`, () => {
         }
     };
 
-    const USEFUL_METHODS = {
-        call: _call,
-        checkBadRequest: _checkBadRequest
-    };
+    const USEFUL_METHODS = {call, checkBadRequest};
 
-    testPostTasks_returnsCreatedCode_(USEFUL_METHODS);
-    testPostTasks_returnsBadRequestCode_(USEFUL_METHODS);
-    testPostTasks_returnsConflictCode_(USEFUL_METHODS);
+    testPostTasks_returnsCreatedStatusCode_(USEFUL_METHODS);
+    testPostTasks_returnsBadRequestStatusCode_(USEFUL_METHODS);
+    testPostTasks_returnsConflictStatusCode_(USEFUL_METHODS);
 });
 
 /**
@@ -91,7 +180,7 @@ const testPostTasks_ = (app) => void describe(`POST ${BASE_URI}`, () => {
  *
  * @private
  */
-const testPostTasks_returnsCreatedCode_ = (methods) =>
+const testPostTasks_returnsCreatedStatusCode_ = (methods) =>
     void it(`should return ${HttpCodeUtil.CREATED} and created task`, async () => {
         // SETUP
         const sendData = {content: FAKE_TASK.content};
@@ -123,7 +212,7 @@ const testPostTasks_returnsCreatedCode_ = (methods) =>
  *
  * @private
  */
-const testPostTasks_returnsBadRequestCode_ = (methods) =>
+const testPostTasks_returnsBadRequestStatusCode_ = (methods) =>
     void it(`should return ${HttpCodeUtil.BAD_REQUEST}`, async () => {
         // SETUP
         const sendData = {content: undefined};
@@ -150,7 +239,7 @@ const testPostTasks_returnsBadRequestCode_ = (methods) =>
  *
  * @private
  */
-const testPostTasks_returnsConflictCode_ = (methods) =>
+const testPostTasks_returnsConflictStatusCode_ = (methods) =>
     void it(`should return ${HttpCodeUtil.CONFLICT}`, async () => {
         // SETUP
         const sendData = {content: FAKE_TASK.content};

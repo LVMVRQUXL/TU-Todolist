@@ -84,7 +84,6 @@ router.delete('/:id', TaskController.removeOneTaskFromId);
 router.get('/:id', TaskController.findOneTaskFromId);
 
 /**
- * TODO: integration tests
  * @swagger
  *
  * '/tasks':
