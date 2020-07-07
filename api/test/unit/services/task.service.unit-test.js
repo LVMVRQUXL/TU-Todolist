@@ -14,6 +14,8 @@ module.exports = () => describe('TaskService', () => {
             findAll: () => {
             },
             findOne: () => {
+            },
+            update: () => {
             }
         }
     };
@@ -26,12 +28,12 @@ module.exports = () => describe('TaskService', () => {
         content: 'test'
     };
 
-    const _assert_calledOnceWithExactly = (spy, args) => {
+    const _assert_calledOnceWithExactly = (spy, arg) => {
         sandbox.assert.calledOnce(spy);
-        if (!args) {
+        if (!arg) {
             sandbox.assert.calledWithExactly(spy);
         } else {
-            sandbox.assert.calledWithExactly(spy, args);
+            sandbox.assert.calledWithExactly(spy, arg);
         }
     };
 
@@ -210,6 +212,29 @@ module.exports = () => describe('TaskService', () => {
             assert.notStrictEqual(taskDTO, undefined);
             assert.strictEqual(taskDTO.id, expectedTaskDTO.id);
             assert.strictEqual(taskDTO.content, expectedTaskDTO.content);
+        });
+    });
+
+    describe('#update', () => {
+        it('should return nothing', async () => {
+            // SETUP
+            const values = {
+                id: fakeTask.id,
+                content: fakeTask.content
+            };
+            const where = {id: fakeTask.id};
+            const expectedResult = undefined;
+            const stubUpdate = sandbox.stub(MockedModels.Task, 'update');
+            stubUpdate.resolves(undefined);
+
+            // CALL
+            // noinspection JSUnresolvedFunction
+            const result = await TaskService.update(values, where);
+
+            // VERIFY
+            assert.strictEqual(result, expectedResult);
+            sandbox.assert.calledOnce(stubUpdate);
+            sandbox.assert.calledWithExactly(stubUpdate, values, {where: where});
         });
     });
 });

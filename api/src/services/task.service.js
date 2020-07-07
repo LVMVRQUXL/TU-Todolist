@@ -56,7 +56,6 @@ class TaskService {
      * @param where {object}
      *
      * @returns {Promise<void>}
-     * TODO: unit tests
      */
     async update(values, where) {
         await Task.update(values, {where: where});
