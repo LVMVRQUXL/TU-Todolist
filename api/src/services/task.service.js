@@ -35,7 +35,6 @@ class TaskService {
      * @param where {object}
      *
      * @returns {Promise<TaskDTO|undefined>}
-     * TODO: unit tests
      */
     async findOne(where) {
         const task = await Task.findOne({where: where});

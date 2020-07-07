@@ -12,6 +12,8 @@ module.exports = () => describe('TaskService', () => {
             destroy: () => {
             },
             findAll: () => {
+            },
+            findOne: () => {
             }
         }
     };
@@ -141,6 +143,53 @@ module.exports = () => describe('TaskService', () => {
             assert.notStrictEqual(taskDTOs, undefined);
             assert.strictEqual(taskDTOs.length, 0);
             _assert_calledOnceWithExactly(stubFindAll);
+            sandbox.assert.notCalled(spyMapToDTO);
+        });
+    });
+
+    describe('#findOne', () => {
+        let stubFindOne = undefined;
+        let spyMapToDTO = undefined;
+
+        beforeEach(() => {
+            stubFindOne = sandbox.stub(MockedModels.Task, 'findOne');
+            spyMapToDTO = sandbox.spy(TaskService, 'mapToDTO');
+        });
+
+        const where = {id: fakeTask.id};
+        // noinspection JSUnresolvedFunction
+        const _call = async (where) => await TaskService.findOne(where);
+
+        it('should return one task with valid where clause', async () => {
+            // SETUP
+            const expectedTask = {
+                id: fakeTask.id,
+                content: fakeTask.content
+            };
+            stubFindOne.resolves(fakeTask);
+
+            // CALL
+            const task = await _call(where);
+
+            // VERIFY
+            assert.notStrictEqual(task, undefined);
+            assert.strictEqual(task.id, expectedTask.id);
+            assert.strictEqual(task.content, expectedTask.content);
+            _assert_calledOnceWithExactly(stubFindOne, {where: where});
+            _assert_calledOnceWithExactly(spyMapToDTO, fakeTask);
+        });
+
+        it('should return undefined with invalid where clause', async () => {
+            // SETUP
+            const expectedTask = undefined;
+            stubFindOne.resolves(undefined);
+
+            // CALL
+            const task = await _call(where);
+
+            // VERIFY
+            assert.strictEqual(task, expectedTask);
+            _assert_calledOnceWithExactly(stubFindOne, {where: where});
             sandbox.assert.notCalled(spyMapToDTO);
         });
     });
