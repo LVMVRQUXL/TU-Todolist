@@ -30,8 +30,6 @@ export class TodoItemComponent implements OnInit {
   onToggle(todo) {
     // Toggle in UI
     todo.completed = !todo.completed;
-    // Toggle on server
-    this.todoService.toggleCompleted(todo).subscribe(todo => console.log(todo));
   }
 
   onDelete(todo) {
@@ -39,11 +37,10 @@ export class TodoItemComponent implements OnInit {
   }
 
   formatStringId(string): string {
-    const specialChars = [' ', ',', ';', '.', '!', '?', ':', '(', ')', '{', '}', '[', ']', '#'];
+    const specialChars = [/\W/]
     specialChars.forEach((char) => {
-      string = string.replace(char, '-');
+      string = string.replace(new RegExp(char, 'g'), '-');
     });
-
     return string;
   }
 

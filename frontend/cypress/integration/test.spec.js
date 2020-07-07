@@ -5,11 +5,10 @@ context('Actions', () => {
   })
 
   const _formatStringId = (string) => {
-    const specialChars = [' ', ',', ';', '.', '!', '?', ':', '(', ')', '{', '}', '[', ']', '#'];
+    const specialChars = [/\W/]
     specialChars.forEach((char) => {
-      string = string.replace(char, '-');
+      string = string.replace(new RegExp(char, 'g'), '-');
     });
-
     return string;
   };
 
@@ -22,8 +21,17 @@ context('Actions', () => {
     });
   });
 
-  describe('remove all tasks', () => {
-    it('should pass', () => {
+  describe('remove task(s)', () => {
+    it('should create and remove this task', ()=>{
+      const value = 'New task remove task';
+      cy.get('.addTodoTitle').type(value).should('have.value', value);
+      cy.get('.addTodoBtn').click();
+
+      cy.get(`#${_formatStringId(value)} .del`).click();
+      cy.get(`#${_formatStringId(value)}`).should('not.exist')
+    });
+    
+    it('should remove all tasks', () => {
       const appTodoItem = 'app-todo-item';
       cy.get(`${appTodoItem} .del`).each(($button)=>{
         cy.wrap($button).click();
@@ -32,66 +40,26 @@ context('Actions', () => {
     });
   });
 
-  /* describe('input a new todo task',() => {
-      it('should have click on input field nouvelleTache', ()=>{
-          cy.get('.addTodoTitle')
-          .type('nouvelleTache').should('have.value', 'nouvelleTache')
-      })
+  describe('is-complete/or not task',()=>{
+    it('should create and click on complete task and reclick on not complete task',() => {
+      const value = 'New,task is complete';
+      cy.get('.addTodoTitle').type(value).should('have.value', value);
+      cy.get('.addTodoBtn').click();
+      
+      cy.get(`#${_formatStringId(value)} .lineThrough`).click();
+      cy.get(`#${_formatStringId(value)}`).should('have.class', 'is-complete');
+      cy.get(`#${_formatStringId(value)} .lineThrough`).click();
+      cy.get(`#${_formatStringId(value)}`).should('not.have.class', 'is-complete');
+    });
+  });
 
-      it('should have display the new Task and verif his content', ()=>{
-          cy.get('.addTodoTitle')
-          .type('nouvelleTache')
-
-          cy.get('.addTodoBtn').click();
-
-          cy.get('#nouvelleTache label').contains('nouvelleTache')
-      });
-
-      it('should have display the new Task', ()=>{
-          cy.get('.addTodoTitle')
-          .type('nouvelleTache')
-
-          cy.get('.addTodoBtn').click();
-
-          cy.get('#nouvelleTache label').contains('nouvelleTache')
-      });
-
-      it('should have dispear the Task', ()=>{
-          cy.get('.addTodoTitle')
-          .type('nouvelleTache')
-
-          cy.get('.addTodoBtn').click();
-
-          cy.get('#nouvelleTache .del').click();
-
-          cy.get('#nouvelleTache').should('not.exist')
-      })
-
-      it('should remove all Task',()=>{
-          cy.get('app-todo-item .del').each(($el)=>{
-              cy.wrap($el).click();
-          })
-          cy.get('app-todo-item').should('not.exist')
-      });
-
-      it('should line-through',()=>{
-          cy.get('.addTodoTitle')
-          .type('nouvelleTache')
-
-          cy.get('.addTodoBtn').click();
-          cy.get('#nouvelleTache .lineThrough').click();
-          cy.get('#nouvelleTache').should('have.class', 'is-complete')
-
-      });
-
-      it('should not have line-through',()=>{
-          cy.get('.addTodoTitle')
-          .type('nouvelleTache');
-          cy.get('.addTodoBtn').click();
-          cy.get('#nouvelleTache .lineThrough').click();
-          cy.get('#nouvelleTache .lineThrough').click();
-          cy.get('#nouvelleTache').should('not.have.class', 'is-complete')
-      });
-
-  }); */
+  describe('go to About Page',()=>{
+    it('should sent user to about Page and go back to index page',()=>{
+      cy.get('a[routerlink="/about"]').click()
+      cy.get(`.aboutPage`).should('exist');
+      cy.get('a[routerlink="/"]').click();
+      cy.get('app-add-todo').should('exist');
+    });
+  });
+  
 })
