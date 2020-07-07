@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const TaskController = require('../controllers').TaskController;
 
 /**
+ * TODO: integration tests
  * @swagger
  *
  * '/tasks/{id}':
@@ -29,6 +30,7 @@ const TaskController = require('../controllers').TaskController;
 router.put('/:id', bodyParser.json(), TaskController.updateOneTaskFromId);
 
 /**
+ * TODO: integration tests
  * @swagger
  *
  * '/tasks/{id}':
@@ -54,6 +56,7 @@ router.put('/:id', bodyParser.json(), TaskController.updateOneTaskFromId);
 router.delete('/:id', TaskController.removeOneTaskFromId);
 
 /**
+ * TODO: integration tests
  * @swagger
  *
  * '/tasks/{id}':
@@ -81,6 +84,7 @@ router.delete('/:id', TaskController.removeOneTaskFromId);
 router.get('/:id', TaskController.findOneTaskFromId);
 
 /**
+ * TODO: integration tests
  * @swagger
  *
  * '/tasks':
@@ -116,8 +120,8 @@ router.get('/', TaskController.findAllTasks);
  *         in: body
  *         required: true
  *     responses:
- *       200:
- *         description: Ok
+ *       201:
+ *         description: New task successfully created
  *       400:
  *         description: Invalid content
  *       409:

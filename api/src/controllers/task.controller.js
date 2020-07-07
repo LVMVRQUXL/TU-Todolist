@@ -18,7 +18,7 @@ class TaskController {
                 if (!taskDTO) {
                     ResponseUtil.conflict(response);
                 } else {
-                    ResponseUtil.ok(response, taskDTO);
+                    ResponseUtil.created(response, taskDTO);
                 }
             }
         } catch (error) {
