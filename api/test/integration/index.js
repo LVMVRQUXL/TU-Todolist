@@ -1,6 +1,6 @@
 const describe = require('mocha').describe;
 const app = require('express')();
 
-const tasks = require('./tasks.integration-test');
+const tasks = require('./tasks');
 
 describe('INTEGRATION TESTINGS', () => tasks.tests(app));
