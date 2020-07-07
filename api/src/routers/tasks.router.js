@@ -56,7 +56,6 @@ router.put('/:id', bodyParser.json(), TaskController.updateOneTaskFromId);
 router.delete('/:id', TaskController.removeOneTaskFromId);
 
 /**
- * TODO: integration tests
  * @swagger
  *
  * '/tasks/{id}':
