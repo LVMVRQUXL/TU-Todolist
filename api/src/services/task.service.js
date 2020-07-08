@@ -27,6 +27,7 @@ class TaskService {
     async findAll() {
         const tasks = await Task.findAll();
 
+        // noinspection JSCheckFunctionSignatures
         return tasks.map(task => this.mapToDTO(task));
     }
 
@@ -42,8 +43,6 @@ class TaskService {
     }
 
     /**
-     * Map given task to DTO
-     *
      * @param task {Task}
      *
      * @returns {TaskDTO}
