@@ -8,8 +8,9 @@ const ResponseUtil = require('../../../src/utils').ResponseUtil;
 
 const getTasks = require('./get-tasks.integration-test');
 const postTasks = require('./post-tasks.integration-test');
-const getTaskId = require('./get-tasks-id.integration-test');
-const deleteTaskId = require('./delete-tasks-id.integration-test');
+const getTasksId = require('./get-tasks-id.integration-test');
+const deleteTasksId = require('./delete-tasks-id.integration-test');
+const putTasksId = require('./put-tasks-id.integration-test');
 
 let spyResponseUtilInternalServerError = undefined;
 
@@ -29,8 +30,9 @@ const tests = (app) => void describe('Tasks integration tests', () => {
 
     getTasks.test(app, sandbox, USEFUL_METHODS);
     postTasks.test(app, sandbox, USEFUL_METHODS);
-    getTaskId.test(app, sandbox, USEFUL_METHODS);
-    deleteTaskId.test(app, sandbox, USEFUL_METHODS);
+    getTasksId.test(app, sandbox, USEFUL_METHODS);
+    deleteTasksId.test(app, sandbox, USEFUL_METHODS);
+    putTasksId.test(app, sandbox, USEFUL_METHODS);
 });
 
 const checkNoInternalSeverError = () => void sandbox.assert.notCalled(spyResponseUtilInternalServerError);

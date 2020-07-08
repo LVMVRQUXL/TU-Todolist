@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const TaskController = require('../controllers').TaskController;
 
 /**
- * TODO: integration tests
  * @swagger
  *
  * '/tasks/{id}':
