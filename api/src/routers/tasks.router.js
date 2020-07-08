@@ -30,7 +30,6 @@ const TaskController = require('../controllers').TaskController;
 router.put('/:id', bodyParser.json(), TaskController.updateOneTaskFromId);
 
 /**
- * TODO: integration tests
  * @swagger
  *
  * '/tasks/{id}':
