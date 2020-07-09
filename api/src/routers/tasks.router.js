@@ -116,8 +116,8 @@ router.get('/', TaskController.findAllTasks);
  *         in: body
  *         required: true
  *     responses:
- *       200:
- *         description: Ok
+ *       201:
+ *         description: New task successfully created
  *       400:
  *         description: Invalid content
  *       409:

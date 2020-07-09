@@ -17,6 +17,14 @@ class ResponseUtil {
 
     /**
      * @param response {object}
+     * @param [data] {*}
+     */
+    created(response, data) {
+        _endWithJSON(_setCode(response, HttpCodeUtil.CREATED), data);
+    }
+
+    /**
+     * @param response {object}
      */
     internalServerError(response) {
         _end(_setCode(response, HttpCodeUtil.INTERNAL_SERVER_ERROR));

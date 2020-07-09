@@ -5,7 +5,7 @@ class NumberUtil {
      * @returns {boolean}
      */
     isPositiveStrict(number) {
-        return number && number > 0;
+        return !isNaN(number) && number > 0;
     }
 
     /**
@@ -14,7 +14,7 @@ class NumberUtil {
      * @returns {boolean}
      */
     isZero(number) {
-        return number && number === 0;
+        return !isNaN(number) && number === 0;
     }
 }
 

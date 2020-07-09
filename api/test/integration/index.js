@@ -1,5 +1,6 @@
 const describe = require('mocha').describe;
 const app = require('express')();
-const sandbox = require('sinon').createSandbox();
 
-describe('INTEGRATION TESTINGS', () => {});
+const tasks = require('./tasks');
+
+describe('INTEGRATION TESTINGS', () => tasks.tests(app));
