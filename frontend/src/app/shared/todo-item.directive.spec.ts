@@ -9,11 +9,11 @@ describe('TodoDirective', () => {
   })
 
   class TestTodoItemComponent {
-    
+
   }
 
   let todosComponent: TodosComponent
-  
+
 
   let component: TestTodoItemComponent;
   let fixture: ComponentFixture<TestTodoItemComponent>;
@@ -35,13 +35,5 @@ describe('TodoDirective', () => {
 
   it('should initialize without background', () => {
     expect(nativeEl.querySelector('div').style.background).toBe('');
-  })
-
-  /*it('should initialize with background', fakeAsync(() => {
-    //spyOn(component, 'addTodo');
-    let button = fixture.debugElement.nativeElement.querySelector('button');
-    button.click();
-    tick();
-    //expect(component.addTodo).toHaveBeenCalled()
-  }))*/
+  });
 });

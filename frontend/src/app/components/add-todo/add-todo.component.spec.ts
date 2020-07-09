@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 describe('AddTodoComponent', () => {
   let component: AddTodoComponent;
   let fixture: ComponentFixture<AddTodoComponent>;
-  
+
   let todoService = {
     getTodos: () => of(MockTodoApiResponse),
   }
@@ -30,18 +30,4 @@ describe('AddTodoComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
-  /*it('should create', () => {
-    expect(component).toBeTruthy();
-  });*/
-
-  /*it('should emit on click', ()=>{
-    console.log(fixture)
-    const nativeElement = fixture.nativeElement;
-    const button = nativeElement.querySelector('.btn');
-    button.dispatchEvent(new Event('click'));
-    console.log(button)
-    fixture.detectChanges();
-    expect(component.onSubmit).toHaveBeenCalled();
-  });*/
 });
