@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Todo } from '../models/Todo';
+import { Todo } from '../interface/todo.interface';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -15,7 +15,7 @@ const httpOptions = {
 })
 export class TodoService {
   todosUrl:string = 'https://jsonplaceholder.typicode.com/todos';
-  todosLimit = '?_limit=5';
+  todosLimit = '?_limit=30';
 
   constructor(private http:HttpClient) { }
 
@@ -33,11 +33,5 @@ export class TodoService {
   // Add Todo
   addTodo(todo:Todo):Observable<Todo> {
     return this.http.post<Todo>(this.todosUrl, todo, httpOptions);
-  }
-
-  // Toggle Completed
-  toggleCompleted(todo: Todo):Observable<any> {
-    const url = `${this.todosUrl}/${todo.id}`;
-    return this.http.put(url, todo, httpOptions);
   }
 }

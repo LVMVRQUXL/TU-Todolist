@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
 
-import { Todo } from 'src/app/models/Todo';
+import { Todo } from '../../interface/todo.interface'
 
 @Component({
   selector: 'app-todo-item',
@@ -30,12 +30,18 @@ export class TodoItemComponent implements OnInit {
   onToggle(todo) {
     // Toggle in UI
     todo.completed = !todo.completed;
-    // Toggle on server
-    this.todoService.toggleCompleted(todo).subscribe(todo => console.log(todo));
   }
 
   onDelete(todo) {
     this.deleteTodo.emit(todo);
+  }
+
+  formatStringId(string): string {
+    const specialChars = [/\W/]
+    specialChars.forEach((char) => {
+      string = string.replace(new RegExp(char, 'g'), '-');
+    });
+    return string;
   }
 
 }
